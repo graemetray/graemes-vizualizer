@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import EventEmitter from "@trayio/builder-squad-event-emitter";
 import styled from "styled-components";
+import format from "date-fns/format";
 
 import "./App.css";
 
@@ -45,6 +46,12 @@ const ConnectorElementTitle = styled.div`
   white-space: nowrap;
 `;
 
+const CurrentTimeWrapper = styled.div`
+  margin: 0 auto;
+  text-align: right;
+  width: 1000px;
+`;
+
 export interface IDataTray {
   coords: {
     x: number;
@@ -56,12 +63,14 @@ export interface IDataTray {
   };
 }
 
-const App = () => {
-  return (
-    <EventEmitter>
-      <GraemesVisualizer />
-    </EventEmitter>
-  );
+export const CurrentTime = () => {
+  const [currentTime, setCurrentTime] = useState("");
+
+  setInterval(() => {
+    setCurrentTime(format(new Date(), "HH:mm:ss.S"));
+  }, 100);
+
+  return <div>{currentTime}</div>;
 };
 
 export const GraemesVisualizer = (props: any) => {
@@ -74,6 +83,9 @@ export const GraemesVisualizer = (props: any) => {
           ✌️
         </span>
       </h4>
+      <CurrentTimeWrapper>
+        <CurrentTime />
+      </CurrentTimeWrapper>
       <ConnectorVisualizer />
       <InterestingConectorList>
         <ConnectorElementWrapper draggable="true">
@@ -89,6 +101,14 @@ export const GraemesVisualizer = (props: any) => {
         </ConnectorElementWrapper>
       </InterestingConectorList>
     </AppWrapper>
+  );
+};
+
+const App = () => {
+  return (
+    <EventEmitter>
+      <GraemesVisualizer />
+    </EventEmitter>
   );
 };
 

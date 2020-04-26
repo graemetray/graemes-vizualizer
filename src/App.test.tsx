@@ -1,9 +1,12 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import React from "react";
+import { render } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+import { CurrentTime } from "./App";
+
+describe("Graeme's visualizer", () => {
+  it("renders current time component", () => {
+    const { getByTestId } = render(<CurrentTime />);
+    expect(getByTestId("currentTime")).toBeInTheDocument();
+  });
 });
