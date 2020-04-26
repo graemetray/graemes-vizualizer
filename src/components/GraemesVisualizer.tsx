@@ -1,6 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import format from "date-fns/format";
+
+interface coordsType {
+  x: number;
+  y: number;
+}
+
+export interface IDataTray {
+  "data-tray"?: {
+    coords: coordsType;
+    connector: {
+      iconURL: string;
+      name: string;
+    };
+  };
+}
 
 const AppWrapper = styled.div`
   margin-bottom: 50px;
@@ -22,10 +37,23 @@ const InterestingConectorList = styled.div`
   width: 960px;
 `;
 
-const ConnectorElementWrapper = styled.div`
+const ConnectorElementWrapper = styled.div<any>`
   border: 1px solid #999;
   border-radius: 5px;
+  bottom: ${({ coords }) =>
+    coords.y < 0 || coords.y > 1000
+      ? "0px"
+      : coords.y > 925
+      ? `${coords.y - 75}px`
+      : `${coords.y}px`};
   height: 75px;
+  left: ${({ coords }) =>
+    coords.x < 0 || coords.x > 1000
+      ? "0px"
+      : coords.x > 925
+      ? `${coords.x - 75}px`
+      : `${coords.x}px`};
+  position: absolute;
   width: 75px;
 `;
 
@@ -45,20 +73,9 @@ const ConnectorElementTitle = styled.div`
 
 const CurrentTimeWrapper = styled.div`
   margin: 0 auto;
-  text-align: right;
+  text-align: left;
   width: 1000px;
 `;
-
-export interface IDataTray {
-  coords: {
-    x: number;
-    y: number;
-  };
-  connector: {
-    iconURL: string;
-    name: string;
-  };
-}
 
 export const CurrentTime = () => {
   const [currentTime, setCurrentTime] = useState("");
@@ -70,8 +87,32 @@ export const CurrentTime = () => {
   return <div>{currentTime}</div>;
 };
 
-export const GraemesVisualizer = (props: any) => {
-  // console.log(props);
+export const validConnector = (inputConnector: IDataTray) => {
+  if (
+    inputConnector["data-tray"]?.connector &&
+    inputConnector["data-tray"]?.coords
+  ) {
+    const { connector, coords } = inputConnector["data-tray"];
+    if (connector.iconURL && connector.name && coords.x && coords.y) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const GraemesVisualizer = (props: IDataTray) => {
+  const [visualizerList, setVisualizerList] = useState<IDataTray[]>([]);
+  const [interestingConnectors, setInterestingConnectors] = useState<
+    IDataTray[]
+  >([]);
+
+  useEffect(() => {
+    if (props["data-tray"]) {
+      setVisualizerList([...visualizerList, { ...props }]);
+    }
+  }, [props["data-tray"]]);
+
+  console.log(props);
   return (
     <AppWrapper>
       <h4>
@@ -83,20 +124,29 @@ export const GraemesVisualizer = (props: any) => {
       <CurrentTimeWrapper data-testid="currentTime">
         <CurrentTime />
       </CurrentTimeWrapper>
-      <ConnectorVisualizer />
-      <InterestingConectorList>
-        <ConnectorElementWrapper draggable="true">
-          <ConnectorElementImage
-            src="https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="butterfly"
-            draggable="false"
-          />
+      <ConnectorVisualizer>
+        {visualizerList.map((connector: IDataTray) => {
+          if (validConnector(connector)) {
+            return (
+              <ConnectorElementWrapper
+                draggable="true"
+                coords={connector["data-tray"]?.coords}
+              >
+                <ConnectorElementImage
+                  src={connector["data-tray"]?.connector.iconURL}
+                  alt="butterfly"
+                  draggable="false"
+                />
 
-          <ConnectorElementTitle>
-            Test a sf asd fa sdf asd f asd fa sdf{" "}
-          </ConnectorElementTitle>
-        </ConnectorElementWrapper>
-      </InterestingConectorList>
+                <ConnectorElementTitle>
+                  {connector["data-tray"]?.connector.name}
+                </ConnectorElementTitle>
+              </ConnectorElementWrapper>
+            );
+          }
+        })}
+      </ConnectorVisualizer>
+      <InterestingConectorList></InterestingConectorList>
     </AppWrapper>
   );
 };
