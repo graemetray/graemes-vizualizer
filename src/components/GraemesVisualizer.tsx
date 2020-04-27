@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import format from "date-fns/format";
+import { v4 as uuidv4 } from "uuid";
 
-interface coordsType {
-  x: number;
-  y: number;
-}
-
-export interface IDataTray {
-  "data-tray"?: {
-    coords: coordsType;
-    connector: {
-      iconURL: string;
-      name: string;
-    };
-  };
-}
+import { IDataTray } from "../types";
+import { getValidCoordPosition, isValidConnector } from "../utils";
 
 const AppWrapper = styled.div`
   margin-bottom: 50px;
@@ -30,29 +19,21 @@ const ConnectorVisualizer = styled.div`
   width: 1000px;
 `;
 
-const InterestingConectorList = styled.div`
+const StyledInterestingConectorList = styled.div`
   border: 1px solid #999;
   margin: 0 auto;
   padding: 20px;
+  text-align: left;
   width: 960px;
 `;
 
 const ConnectorElementWrapper = styled.div<any>`
+  background-color: white;
   border: 1px solid #999;
   border-radius: 5px;
-  bottom: ${({ coords }) =>
-    coords.y < 0 || coords.y > 1000
-      ? "0px"
-      : coords.y > 925
-      ? `${coords.y - 75}px`
-      : `${coords.y}px`};
+  bottom: ${({ coords }) => getValidCoordPosition(coords.y)};
   height: 75px;
-  left: ${({ coords }) =>
-    coords.x < 0 || coords.x > 1000
-      ? "0px"
-      : coords.x > 925
-      ? `${coords.x - 75}px`
-      : `${coords.x}px`};
+  left: ${({ coords }) => getValidCoordPosition(coords.x)};
   position: absolute;
   width: 75px;
 `;
@@ -87,18 +68,40 @@ export const CurrentTime = () => {
   return <div>{currentTime}</div>;
 };
 
-export const validConnector = (inputConnector: IDataTray) => {
-  if (
-    inputConnector["data-tray"]?.connector &&
-    inputConnector["data-tray"]?.coords
-  ) {
-    const { connector, coords } = inputConnector["data-tray"];
-    if (connector.iconURL && connector.name && coords.x && coords.y) {
-      return true;
-    }
-  }
-  return false;
+export const InterestingConectorList = (props: {
+  interestingConnectors: IDataTray[];
+}) => {
+  const { interestingConnectors } = props;
+  return (
+    <StyledInterestingConectorList
+      {...props}
+      data-testid="interestingConectorList"
+    >
+      {interestingConnectors.map((connector: IDataTray) => {
+        if (isValidConnector(connector)) {
+          return renderConnector(connector);
+        }
+      })}
+    </StyledInterestingConectorList>
+  );
 };
+
+export const renderConnector = (connector: IDataTray) => (
+  <ConnectorElementWrapper
+    draggable="true"
+    coords={connector["data-tray"]?.coords}
+    key={uuidv4()}
+  >
+    <ConnectorElementImage
+      src={connector["data-tray"]?.connector.iconURL}
+      draggable="false"
+    />
+
+    <ConnectorElementTitle>
+      {connector["data-tray"]?.connector.name}
+    </ConnectorElementTitle>
+  </ConnectorElementWrapper>
+);
 
 export const GraemesVisualizer = (props: IDataTray) => {
   const [visualizerList, setVisualizerList] = useState<IDataTray[]>([]);
@@ -124,29 +127,15 @@ export const GraemesVisualizer = (props: IDataTray) => {
       <CurrentTimeWrapper data-testid="currentTime">
         <CurrentTime />
       </CurrentTimeWrapper>
-      <ConnectorVisualizer>
+      <ConnectorVisualizer data-testid="connectorVisualizer">
         {visualizerList.map((connector: IDataTray) => {
-          if (validConnector(connector)) {
-            return (
-              <ConnectorElementWrapper
-                draggable="true"
-                coords={connector["data-tray"]?.coords}
-              >
-                <ConnectorElementImage
-                  src={connector["data-tray"]?.connector.iconURL}
-                  alt="butterfly"
-                  draggable="false"
-                />
-
-                <ConnectorElementTitle>
-                  {connector["data-tray"]?.connector.name}
-                </ConnectorElementTitle>
-              </ConnectorElementWrapper>
-            );
+          if (isValidConnector(connector)) {
+            return renderConnector(connector);
           }
         })}
       </ConnectorVisualizer>
-      <InterestingConectorList></InterestingConectorList>
+      <h4>Interesting Connector List</h4>
+      <InterestingConectorList interestingConnectors={interestingConnectors} />
     </AppWrapper>
   );
 };
