@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { GraemesVisualizer } from "./GraemesVisualizer";
-import { InterestingConectorList } from "./GraemesVisualizer";
+import { InterestingConnectorList } from "../interesting-connector-list";
 
 const dummyData = {
   coords: { x: 20, y: 20 },
@@ -27,12 +27,13 @@ describe("Graeme's visualizer", () => {
 
   it("renders connector in interesting connectors box", () => {
     const { getByTestId } = render(
-      <InterestingConectorList
+      <InterestingConnectorList
         interestingConnectors={[{ "data-tray": dummyData }]}
+        setInterestingConnectors={() => {}}
       />
     );
 
-    const connectorVisualizer = getByTestId("interestingConectorList");
+    const connectorVisualizer = getByTestId("interestingConnectorList");
     expect(connectorVisualizer.children.length).toBe(1);
   });
 });
