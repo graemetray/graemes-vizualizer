@@ -1,6 +1,6 @@
 ### Graeme's visualizer
 
-Live demo here:
+Live demo here: http://graemesvisualizer.s3-website-us-east-1.amazonaws.com/index.html
 
 How to run locally:
 
