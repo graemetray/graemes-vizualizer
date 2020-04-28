@@ -41,11 +41,11 @@ export const GraemesVisualizer = (props: IDataTray) => {
           ✌️
         </span>
       </h4>
-      <CurrentTime />
+      <CurrentTime data-testid="currentTime" />
       <ConnectorVisualizer data-testid="connectorVisualizer">
         {visualizerList.map((connector: IDataTray) => {
           if (isValidConnector(connector)) {
-            return Connector(connector, false);
+            return <Connector connector={connector} interestingList={false} />;
           }
           return null;
         })}
@@ -54,6 +54,7 @@ export const GraemesVisualizer = (props: IDataTray) => {
       <InterestingConnectorList
         interestingConnectors={interestingConnectors}
         setInterestingConnectors={setInterestingConnectors}
+        data-testid="interestingConnectorList"
       />
     </AppWrapper>
   );

@@ -38,7 +38,7 @@ export const InterestingConnectorList = (props: {
     >
       {interestingConnectors.map((connector: IDataTray) => {
         if (isValidConnector(connector)) {
-          return Connector(connector, true);
+          return <Connector connector={connector} interestingList={true} />;
         }
         return null;
       })}

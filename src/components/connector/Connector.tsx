@@ -34,7 +34,11 @@ const ConnectorElementTitle = styled.div`
   white-space: nowrap;
 `;
 
-export const Connector = (connector: IDataTray, interestingList: boolean) => {
+export const Connector = (props: {
+  connector: IDataTray;
+  interestingList: boolean;
+}) => {
+  const { connector, interestingList } = props;
   const drag = (
     event: React.DragEvent<HTMLDivElement>,
     connector: IDataTray
@@ -52,13 +56,15 @@ export const Connector = (connector: IDataTray, interestingList: boolean) => {
       coords={connector["data-tray"]?.coords}
       key={uuidv4()}
       interestingList={interestingList}
+      data-testid="connector"
     >
       <ConnectorElementImage
         src={connector["data-tray"]?.connector.iconURL}
         draggable="false"
+        data-testid="connectorImage"
       />
 
-      <ConnectorElementTitle>
+      <ConnectorElementTitle data-testid="connectorTitle">
         {connector["data-tray"]?.connector.name}
       </ConnectorElementTitle>
     </ConnectorElementWrapper>
