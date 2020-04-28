@@ -6,4 +6,5 @@ How to run locally:
 
 1. Clone this repo
 2. Run `cd graemes-visualizer`
-3. Run `yarn`
+3. Run `yarn install`
+4. Run `yarn start`
