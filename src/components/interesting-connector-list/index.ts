@@ -1,1 +1,1 @@
-export * from "./InterestingConnectorList";
+export * from './InterestingConnectorList'

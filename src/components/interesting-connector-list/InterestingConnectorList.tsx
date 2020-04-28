@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { IDataTray } from "../../types";
-import { isValidConnector } from "../../utils";
-import { Connector } from "../connector";
+import { IDataTray } from '../../types'
+import { isValidConnector } from '../../utils'
+import { Connector } from '../connector'
 
 const StyledInterestingConnectorList = styled.div`
   border: 1px solid #999;
@@ -12,23 +12,23 @@ const StyledInterestingConnectorList = styled.div`
   padding: 20px;
   text-align: left;
   width: 960px;
-`;
+`
 
 export const InterestingConnectorList = (props: {
-  interestingConnectors: IDataTray[];
-  setInterestingConnectors(connectors: IDataTray[]): void;
+  interestingConnectors: IDataTray[]
+  setInterestingConnectors(connectors: IDataTray[]): void
 }) => {
-  const { interestingConnectors, setInterestingConnectors } = props;
+  const { interestingConnectors, setInterestingConnectors } = props
 
   const allowDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const drop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const interestingConnector = JSON.parse(event.dataTransfer.getData("text"));
-    setInterestingConnectors([interestingConnector, ...interestingConnectors]);
-  };
+    event.preventDefault()
+    const interestingConnector = JSON.parse(event.dataTransfer.getData('text'))
+    setInterestingConnectors([interestingConnector, ...interestingConnectors])
+  }
   return (
     <StyledInterestingConnectorList
       {...props}
@@ -38,10 +38,10 @@ export const InterestingConnectorList = (props: {
     >
       {interestingConnectors.map((connector: IDataTray) => {
         if (isValidConnector(connector)) {
-          return <Connector connector={connector} interestingList={true} />;
+          return <Connector connector={connector} interestingList={true} />
         }
-        return null;
+        return null
       })}
     </StyledInterestingConnectorList>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
 export interface ICoordsType {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 export interface IDataTray {
-  "data-tray"?: {
-    coords: ICoordsType;
+  'data-tray'?: {
+    coords: ICoordsType
     connector: {
-      iconURL: string;
-      name: string;
-    };
-  };
+      iconURL: string
+      name: string
+    }
+  }
 }

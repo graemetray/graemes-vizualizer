@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 
-import { IDataTray } from "../../types";
-import { isValidConnector } from "../../utils";
-import { Connector } from "../connector";
-import { CurrentTime } from "../current-time";
-import { InterestingConnectorList } from "../interesting-connector-list";
+import { IDataTray } from '../../types'
+import { isValidConnector } from '../../utils'
+import { Connector } from '../connector'
+import { CurrentTime } from '../current-time'
+import { InterestingConnectorList } from '../interesting-connector-list'
 
 const AppWrapper = styled.div`
   margin-bottom: 50px;
   text-align: center;
-`;
+`
 
 const ConnectorVisualizer = styled.div`
   border: 1px solid #999;
@@ -19,24 +19,24 @@ const ConnectorVisualizer = styled.div`
   margin: 5px auto 20px auto;
   position: relative;
   width: 1000px;
-`;
+`
 
 export const GraemesVisualizer = (props: IDataTray) => {
-  const [visualizerList, setVisualizerList] = useState<IDataTray[]>([]);
+  const [visualizerList, setVisualizerList] = useState<IDataTray[]>([])
   const [interestingConnectors, setInterestingConnectors] = useState<
     IDataTray[]
-  >([]);
+  >([])
 
   useEffect(() => {
-    if (props["data-tray"]) {
-      setVisualizerList([...visualizerList, { ...props }]);
+    if (props['data-tray']) {
+      setVisualizerList([...visualizerList, { ...props }])
     }
-  }, [props["data-tray"]]);
+  }, [props['data-tray']])
 
   return (
     <AppWrapper>
       <h4>
-        Graeme's Visualizer{" "}
+        Graeme's Visualizer{' '}
         <span role="img" aria-label="victory emoji">
           ✌️
         </span>
@@ -45,9 +45,9 @@ export const GraemesVisualizer = (props: IDataTray) => {
       <ConnectorVisualizer data-testid="connectorVisualizer">
         {visualizerList.map((connector: IDataTray) => {
           if (isValidConnector(connector)) {
-            return <Connector connector={connector} interestingList={false} />;
+            return <Connector connector={connector} interestingList={false} />
           }
-          return null;
+          return null
         })}
       </ConnectorVisualizer>
       <h4>Interesting Connector List</h4>
@@ -57,5 +57,5 @@ export const GraemesVisualizer = (props: IDataTray) => {
         data-testid="interestingConnectorList"
       />
     </AppWrapper>
-  );
-};
+  )
+}

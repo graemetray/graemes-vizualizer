@@ -1,1 +1,1 @@
-export * from "./CurrentTime";
+export * from './CurrentTime'

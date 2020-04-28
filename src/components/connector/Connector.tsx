@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
+import React from 'react'
+import styled from 'styled-components'
+import { v4 as uuidv4 } from 'uuid'
 
-import { IDataTray } from "../../types";
-import { getValidCoordPosition } from "../../utils";
+import { IDataTray } from '../../types'
+import { getValidCoordPosition } from '../../utils'
 
 const ConnectorElementWrapper = styled.div<any>`
   background-color: white;
@@ -11,20 +11,20 @@ const ConnectorElementWrapper = styled.div<any>`
   border-radius: 5px;
   bottom: ${({ coords }) => getValidCoordPosition(coords.y)};
   display: ${({ interestingList }) =>
-    interestingList ? "inline-block" : "block"};
+    interestingList ? 'inline-block' : 'block'};
   height: 75px;
   left: ${({ coords }) => getValidCoordPosition(coords.x)};
-  margin: ${({ interestingList }) => (interestingList ? "0 20px 20px 0" : "0")};
+  margin: ${({ interestingList }) => (interestingList ? '0 20px 20px 0' : '0')};
   position: ${({ interestingList }) =>
-    interestingList ? "static" : "absolute"};
+    interestingList ? 'static' : 'absolute'};
   width: 75px;
-`;
+`
 
 const ConnectorElementImage = styled.img`
   margin-bottom: 5px;
   width: 100%;
   height: 50px;
-`;
+`
 
 const ConnectorElementTitle = styled.div`
   font-size: 10px;
@@ -32,20 +32,20 @@ const ConnectorElementTitle = styled.div`
   padding: 0 5px;
   text-overflow: ellipsis;
   white-space: nowrap;
-`;
+`
 
 export const Connector = (props: {
-  connector: IDataTray;
-  interestingList: boolean;
+  connector: IDataTray
+  interestingList: boolean
 }) => {
-  const { connector, interestingList } = props;
+  const { connector, interestingList } = props
   const drag = (
     event: React.DragEvent<HTMLDivElement>,
     connector: IDataTray
   ) => {
-    event.currentTarget.style.border = "dashed";
-    event.dataTransfer.setData("text/plain", JSON.stringify(connector));
-  };
+    event.currentTarget.style.border = 'dashed'
+    event.dataTransfer.setData('text/plain', JSON.stringify(connector))
+  }
 
   return (
     <ConnectorElementWrapper
@@ -53,20 +53,20 @@ export const Connector = (props: {
       onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
         drag(event, connector)
       }
-      coords={connector["data-tray"]?.coords}
+      coords={connector['data-tray']?.coords}
       key={uuidv4()}
       interestingList={interestingList}
       data-testid="connector"
     >
       <ConnectorElementImage
-        src={connector["data-tray"]?.connector.iconURL}
+        src={connector['data-tray']?.connector.iconURL}
         draggable="false"
         data-testid="connectorImage"
       />
 
       <ConnectorElementTitle data-testid="connectorTitle">
-        {connector["data-tray"]?.connector.name}
+        {connector['data-tray']?.connector.name}
       </ConnectorElementTitle>
     </ConnectorElementWrapper>
-  );
-};
+  )
+}
